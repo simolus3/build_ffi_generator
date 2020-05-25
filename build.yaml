@@ -1,0 +1,18 @@
+builders:
+  build_ffi_generator:
+    import: 'package:build_ffi_generator/builder.dart'
+    builder_factories: ['create']
+    build_extensions: {'.ffi.txt': ['.ffi.dart']}
+    auto_apply: dependents
+    build_to: source
+
+targets:
+  $default:
+    sources:
+      - "example/sqlite3.ffi.txt"
+      # We don't need those, but the build system complains
+      - "$package$"
+      - "lib/$lib$"
+    builders:
+      build_ffi_generator:
+        enabled: true
