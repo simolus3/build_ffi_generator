@@ -60,7 +60,7 @@ void _writeTypedefs(FfiFile file, StringBuffer into) {
         into.write(',');
       }
 
-      into.write(arg.type.dartName);
+      into..write(arg.type.dartName)..write(' ')..write(arg.name);
 
       first = false;
     }
@@ -99,28 +99,9 @@ void _writeBindingsClass(FfiFile file, StringBuffer into) {
 
 extension on CType {
   String get nativeTypeName {
-    if (this is IntType) {
-      final typedThis = this as IntType;
-      switch (typedThis.kind) {
-        case IntKind.int8:
-          return 'Int8';
-        case IntKind.int16:
-          return 'Int16';
-        case IntKind.int32:
-          return 'Int32';
-        case IntKind.int64:
-          return 'Int64';
-        case IntKind.uint8:
-          return 'Uint8';
-        case IntKind.uint16:
-          return 'Uint16';
-        case IntKind.uint32:
-          return 'Uint32';
-        case IntKind.uint64:
-          return 'Uint64';
-        case IntKind.int:
-          return 'IntPtr';
-      }
+    if (this is SimpleCType) {
+      final typedThis = this as SimpleCType;
+      return typedThis.dartNativeType;
     } else if (this is NamedType) {
       final inner = (this as NamedType).type;
       if (inner is OpaqueStruct) {
@@ -135,8 +116,14 @@ extension on CType {
   }
 
   String get dartName {
-    if (this is IntType) {
-      return 'int';
+    if (this is SimpleCType) {
+      return (this as SimpleCType).dartType;
+    }
+    if (this is NamedType) {
+      final inner = (this as NamedType).type;
+      if (inner is! OpaqueStruct) {
+        return inner.dartName;
+      }
     }
 
     return nativeTypeName;

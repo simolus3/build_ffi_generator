@@ -1,3 +1,7 @@
+# build_ffi_generator
+
+Use this package to generate `dart:ffi` bindings.
+
 ## Types
 
 The following types are supported:
@@ -8,3 +12,7 @@ The following types are supported:
 - `float`
 - `double`
 - `int`, which is equivalent to `int32` or `int64` depending on the runtime
+
+## TODO
+
+- Don't require argument names

@@ -8,11 +8,6 @@ builders:
 
 targets:
   $default:
-    sources:
-      - "example/sqlite3.ffi.txt"
-      # We don't need those, but the build system complains
-      - "$package$"
-      - "lib/$lib$"
     builders:
       build_ffi_generator:
         enabled: true

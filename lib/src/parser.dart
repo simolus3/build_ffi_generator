@@ -1,5 +1,4 @@
 import 'package:meta/meta.dart';
-import 'package:source_span/source_span.dart';
 
 import 'elements.dart';
 import 'scanner.dart';
@@ -114,13 +113,15 @@ class Parser {
 
     _consume(TokenType.leftParen);
     final args = <Argument>[];
-    do {
-      final type = _cType();
-      final name = _consumeIdentifier();
+    if (!_match(TokenType.rightParen)) {
+      do {
+        final type = _cType();
+        final name = _consumeIdentifier();
 
-      args.add(Argument(name, type));
-    } while (_match(TokenType.comma));
-    _consume(TokenType.rightParen);
+        args.add(Argument(name, type));
+      } while (_match(TokenType.comma));
+      _consume(TokenType.rightParen);
+    }
 
     _consume(TokenType.semicolon);
     return CFunction(name, returnType, args);
@@ -162,11 +163,14 @@ class Parser {
       case 'uint64':
         return const IntType(IntKind.uint64);
       case 'int':
+      case 'size_t':
         return const IntType(IntKind.int);
       case 'float':
         return const FloatType();
       case 'double':
         return const DoubleType();
+      case 'void':
+        return const VoidType();
 //      case 'char':
 //        return const IntType(IntKind.char);
       default:

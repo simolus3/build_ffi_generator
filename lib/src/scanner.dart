@@ -140,6 +140,9 @@ class Scanner {
       case $semicolon:
         _add(TokenType.semicolon);
         break;
+      case $hash:
+        _lineComment();
+        break;
       case $space:
       case $cr:
       case $tab:
@@ -177,6 +180,12 @@ class Scanner {
       _add(matchingKeyword);
     } else {
       tokens.add(Identifier(_currentSpan));
+    }
+  }
+
+  void _lineComment() {
+    while (!_isAtEnd && _peek() != $lf) {
+      _advance();
     }
   }
 }

@@ -1,3 +1,9 @@
 type sqlite3 = opaque struct;
+type char = uint8;
 
-int32 sqlite3_open(int8 *filename, sqlite3 **ppDb);
+# Test
+int32 sqlite3_open(char *filename, sqlite3 **ppDb);
+int32 sqlite3_open_v2(char *filename, sqlite3 **ppDb, int32 flags, char *zVfs);
+
+type sqlite3_stmt = opaque struct;
+void *sqlite3_column_blob(sqlite3_stmt* stmt, int iCol);

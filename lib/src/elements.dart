@@ -29,6 +29,11 @@ class TypeDefinition extends Element implements Definition {
 
 abstract class CType {}
 
+abstract class SimpleCType implements CType {
+  String get dartNativeType;
+  String get dartType;
+}
+
 class PointerType implements CType {
   final bool isConst;
   final CType inner;
@@ -50,12 +55,31 @@ class NamedType implements CType {
 
 class OpaqueStruct implements CType {}
 
-class FloatType implements CType {
+class FloatType implements SimpleCType {
   const FloatType();
+
+  @override
+  String get dartNativeType => 'Float';
+  @override
+  String get dartType => 'double';
 }
 
-class DoubleType implements CType {
+class DoubleType implements SimpleCType {
   const DoubleType();
+
+  @override
+  String get dartNativeType => 'Double';
+  @override
+  String get dartType => 'double';
+}
+
+class VoidType implements SimpleCType {
+  const VoidType();
+
+  @override
+  String get dartNativeType => 'Void';
+  @override
+  String get dartType => 'void';
 }
 
 enum IntKind {
@@ -71,10 +95,39 @@ enum IntKind {
 //  char,
 }
 
-class IntType implements CType {
+class IntType implements SimpleCType {
   final IntKind kind;
 
   const IntType(this.kind);
+
+  @override
+  String get dartNativeType {
+    switch (kind) {
+      case IntKind.int8:
+        return 'Int8';
+      case IntKind.int16:
+        return 'Int16';
+      case IntKind.int32:
+        return 'Int32';
+      case IntKind.int64:
+        return 'Int64';
+      case IntKind.uint8:
+        return 'Uint8';
+      case IntKind.uint16:
+        return 'Uint16';
+      case IntKind.uint32:
+        return 'Uint32';
+      case IntKind.uint64:
+        return 'Uint64';
+      case IntKind.int:
+        return 'IntPtr';
+    }
+
+    throw AssertionError('dead code');
+  }
+
+  @override
+  String get dartType => 'int';
 }
 
 class CFunction implements Definition {
