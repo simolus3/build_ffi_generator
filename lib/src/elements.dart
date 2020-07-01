@@ -53,7 +53,22 @@ class NamedType implements CType {
   NamedType(this.name, this.type);
 }
 
-class OpaqueStruct implements CType {}
+abstract class StructType implements CType {}
+
+class OpaqueStruct implements StructType {}
+
+class Struct implements StructType {
+  final List<StructEntry> entries;
+
+  Struct(this.entries);
+}
+
+class StructEntry {
+  final String name;
+  final CType type;
+
+  StructEntry(this.name, this.type);
+}
 
 class FloatType implements SimpleCType {
   const FloatType();

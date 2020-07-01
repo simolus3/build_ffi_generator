@@ -20,9 +20,26 @@ String generateForFile(FfiFile file) {
 
 void _writeStructs(FfiFile file, StringBuffer into) {
   for (final type in file.types) {
-    if (type.definition is OpaqueStruct) {
+    if (type.definition is StructType) {
       final name = type.name;
-      into..writeln('class $name extends Struct {}');
+      final definition = type.definition;
+
+      into.writeln('class $name extends Struct {');
+      if (definition is Struct) {
+        for (final entry in definition.entries) {
+          if (entry.type is! PointerType) {
+            // Non-pointer types need an annotation
+            into.writeln('@${entry.type.nativeTypeName}()');
+          }
+
+          into
+            ..write(entry.type.dartName)
+            ..write(' ')
+            ..write(entry.name)
+            ..writeln(';');
+        }
+      }
+      into.writeln('}');
     }
   }
 }
@@ -104,7 +121,7 @@ extension on CType {
       return typedThis.dartNativeType;
     } else if (this is NamedType) {
       final inner = (this as NamedType).type;
-      if (inner is OpaqueStruct) {
+      if (inner is StructType) {
         return (this as NamedType).name;
       }
       return inner.nativeTypeName;
@@ -121,7 +138,7 @@ extension on CType {
     }
     if (this is NamedType) {
       final inner = (this as NamedType).type;
-      if (inner is! OpaqueStruct) {
+      if (inner is! StructType) {
         return inner.dartName;
       }
     }

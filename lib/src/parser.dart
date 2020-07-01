@@ -142,6 +142,8 @@ class Parser {
     if (_match(TokenType.opaque)) {
       _consume(TokenType.struct);
       return OpaqueStruct();
+    } else if (_check(TokenType.struct)) {
+      return _struct();
     }
 
     final name = _consumeIdentifier();
@@ -150,6 +152,7 @@ class Parser {
         return const IntType(IntKind.int8);
       case 'int16':
         return const IntType(IntKind.int16);
+      case 'int':
       case 'int32':
         return const IntType(IntKind.int32);
       case 'int64':
@@ -162,7 +165,6 @@ class Parser {
         return const IntType(IntKind.uint32);
       case 'uint64':
         return const IntType(IntKind.uint64);
-      case 'int':
       case 'size_t':
         return const IntType(IntKind.int);
       case 'float':
@@ -180,6 +182,23 @@ class Parser {
         }
         return type;
     }
+  }
+
+  CType _struct() {
+    _consume(TokenType.struct);
+    _consume(TokenType.leftBrace);
+
+    final entries = <StructEntry>[];
+    do {
+      final type = _cType();
+      final name = _consumeIdentifier();
+
+      entries.add(StructEntry(name, type));
+      _consume(TokenType.semicolon);
+    } while (!_check(TokenType.rightBrace));
+
+    _consume(TokenType.rightBrace);
+    return Struct(entries);
   }
 }
 

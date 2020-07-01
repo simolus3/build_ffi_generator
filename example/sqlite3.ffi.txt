@@ -7,3 +7,15 @@ int32 sqlite3_open_v2(char *filename, sqlite3 **ppDb, int32 flags, char *zVfs);
 
 type sqlite3_stmt = opaque struct;
 void *sqlite3_column_blob(sqlite3_stmt* stmt, int iCol);
+
+type Another = struct {
+    int64 foo;
+};
+
+type ByteBuffer = struct {
+    int64 len;
+    uint8 *data;
+    Another* foo;
+};
+
+ByteBuffer* create_buffer(Another d);

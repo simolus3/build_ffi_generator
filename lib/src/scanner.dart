@@ -32,8 +32,10 @@ enum TokenType {
   comma,
   equals,
   identifier,
+  leftBrace,
   leftParen,
   opaque,
+  rightBrace,
   rightParen,
   semicolon,
   struct,
@@ -125,8 +127,14 @@ class Scanner {
       case $equal:
         _add(TokenType.equals);
         break;
+      case $lbrace:
+        _add(TokenType.leftBrace);
+        break;
       case $lparen:
         _add(TokenType.leftParen);
+        break;
+      case $rbrace:
+        _add(TokenType.rightBrace);
         break;
       case $rparen:
         _add(TokenType.rightParen);

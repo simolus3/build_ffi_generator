@@ -7,6 +7,11 @@ void main() {
     const input = '''
 type sqlite3 = opaque struct;
 
+type ByteBuffer = struct {
+  int64 len;
+  uint8 *data;
+};
+
 int32 sqlite3_open(int8 *filename, sqlite3 **ppDb);
     ''';
 
