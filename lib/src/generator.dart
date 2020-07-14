@@ -87,7 +87,7 @@ void _writeTypedefs(FfiFile file, StringBuffer into) {
 }
 
 void _writeBindingsClass(FfiFile file, StringBuffer into) {
-  into..writeln('class Bindings {');
+  into..writeln('class Bindings {')..writeln('final DynamicLibrary library;');
 
   // Write fields to hold the functions
   for (final function in file.functions) {
@@ -95,7 +95,7 @@ void _writeBindingsClass(FfiFile file, StringBuffer into) {
   }
 
   // Write constructor
-  into..writeln('Bindings(DynamicLibrary library): ');
+  into..writeln('Bindings(this.library): ');
   var first = true;
 
   for (final function in file.functions) {
