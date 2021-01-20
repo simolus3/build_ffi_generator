@@ -24,6 +24,11 @@ void _writeStructs(FfiFile file, StringBuffer into) {
       final name = type.name;
       final definition = type.definition;
 
+      if (type.definition is OpaqueStruct) {
+        into.writeln('class $name extends Opaque {}');
+        continue;
+      }
+
       into.writeln('class $name extends Struct {');
       if (definition is Struct) {
         for (final entry in definition.entries) {
