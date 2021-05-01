@@ -3,9 +3,9 @@
 
 import 'dart:ffi';
 
-class sqlite3 extends Struct {}
+class sqlite3 extends Opaque {}
 
-class sqlite3_stmt extends Struct {}
+class sqlite3_stmt extends Opaque {}
 
 class Another extends Struct {
   @Int64()
@@ -35,11 +35,12 @@ typedef _create_buffer_native = Pointer<ByteBuffer> Function(Another);
 typedef create_buffer_dart = Pointer<ByteBuffer> Function(Another d);
 
 class Bindings {
+  final DynamicLibrary library;
   final sqlite3_open_dart sqlite3_open;
   final sqlite3_open_v2_dart sqlite3_open_v2;
   final sqlite3_column_blob_dart sqlite3_column_blob;
   final create_buffer_dart create_buffer;
-  Bindings(DynamicLibrary library)
+  Bindings(this.library)
       : sqlite3_open =
             library.lookupFunction<_sqlite3_open_native, sqlite3_open_dart>(
                 'sqlite3_open'),

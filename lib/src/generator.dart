@@ -68,7 +68,7 @@ void _writeTypedefs(FfiFile file, StringBuffer into) {
       first = false;
     }
 
-    into..writeln(');');
+    into.writeln(');');
 
     // Write Dart typedef that can be called
     into
@@ -87,7 +87,7 @@ void _writeTypedefs(FfiFile file, StringBuffer into) {
       first = false;
     }
 
-    into..writeln(');');
+    into.writeln(');');
   }
 }
 
@@ -100,12 +100,12 @@ void _writeBindingsClass(FfiFile file, StringBuffer into) {
   }
 
   // Write constructor
-  into..writeln('Bindings(this.library): ');
+  into.writeln('Bindings(this.library): ');
   var first = true;
 
   for (final function in file.functions) {
     if (!first) {
-      into..writeln(', ');
+      into.writeln(', ');
     }
 
     into
